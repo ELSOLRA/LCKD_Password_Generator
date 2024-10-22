@@ -1,0 +1,16 @@
+@use "variables"; // Adjust the path as necessary
+
+@mixin sign-in-button {
+  width: 86px; // Set width
+  height: 38px; // Set height
+  top: 22px; // Positioning
+  left: 265px; // Positioning
+  padding: 4px 8px; // Padding
+  gap: 10px; // Gap
+  border-radius: 3px 0 0 0; // Rounded corners
+  border: 1px solid variables.$alert-color; // Border color (alert color)
+  color: variables.$alert-color; // Text color (alert color)
+  background-color: variables.$primary-color; // Background color (dark blue)
+  opacity: 1; // Set opacity to 1 for visibility
+  cursor: pointer; // Change cursor on hover
+}

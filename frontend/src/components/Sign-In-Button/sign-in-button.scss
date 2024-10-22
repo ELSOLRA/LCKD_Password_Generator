@@ -1,0 +1,5 @@
+@use "../../styles/mixins";
+
+.sign-in-button {
+  @include mixins.sign-in-button;
+}
