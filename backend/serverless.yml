@@ -1,0 +1,34 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: elsolra
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: password-manager
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  stage: ${opt:stage, 'dev'}
+  region: eu-north-1
+  environment:
+    DB_TABLE: ${self:service}-${self:provider.stage}
+    ENCRYPTION_KEY: abc123
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DB_TABLE}
+
+functions:
+  register:
+    handler: handler.hello
+    events:
+      - httpApi:
+          path: /
+          method: get
