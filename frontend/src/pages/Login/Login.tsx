@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "../../components/Header/Header";
 import SignInButton from "../../components/Sign-In-Button/Sign-In-Button";
-import "./Login.scss";
+import "./login.scss";
 
 const Login: React.FC = () => {
   return (
