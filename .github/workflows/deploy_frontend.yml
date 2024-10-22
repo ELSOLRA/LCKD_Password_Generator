@@ -34,7 +34,7 @@ jobs:
       - name: Build dist
         run: npm run build
       - name: Deploy to S3 bucket
-        if: github.event_name = 'push' && github.ref == 'refs/heads/dev'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
         uses: jakejarvis/s3-sync-action@master
         with:
           args: --follow-symlinks --delete
