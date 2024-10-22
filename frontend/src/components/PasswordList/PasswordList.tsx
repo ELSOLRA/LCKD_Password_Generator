@@ -1,5 +1,5 @@
 import React from "react";
-import "./PasswordList.scss";
+import "./passwordList.scss";
 
 interface PasswordListProps {
   passwords: string[];
