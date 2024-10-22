@@ -1,33 +1,24 @@
 import React from "react";
 import "./credentialForm.scss";
+import showPassword from "../../assets/actions/show-password-button.png";
 
-interface CredentialFormProps {
-  onSubmit: (data: { www: string; username: string; password: string }) => void;
-}
-
-const CredentialForm: React.FC<CredentialFormProps> = ({ onSubmit }) => {
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-    const data = {
-      www: formData.get("www") as string,
-      username: formData.get("username") as string,
-      password: formData.get("password") as string,
-    };
-    onSubmit(data);
-  };
-
+const CredentialForm: React.FC = () => {
   return (
-    <form className="credential-form" onSubmit={handleSubmit}>
-      <input type="text" name="www" placeholder="WWW" required />
-      <input type="text" name="username" placeholder="USERNAME" required />
-      <input
-        type="password"
-        name="password"
-        placeholder="SECURE PASSWORD"
-        required
-      />
-      <button type="submit">CREATE LCKD</button>
+    <form className="credential-form">
+      <div className="input-group">
+        <label htmlFor="username">USERNAME</label>
+        <input type="text" id="username" placeholder="sixten.svensson" />
+      </div>
+      <div className="input-group">
+        <label htmlFor="password">PASSWORD</label>
+        <div className="password-wrapper">
+          <input type="password" id="password" placeholder="••••••••" />
+          <span className="toggle-password">
+            <img src={showPassword} alt="" />
+          </span>{" "}
+          {/* Placeholder for the icon */}
+        </div>
+      </div>
     </form>
   );
 };

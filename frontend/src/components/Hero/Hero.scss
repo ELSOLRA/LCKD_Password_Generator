@@ -1,0 +1,10 @@
+@use "../../styles/variables";
+
+.hero {
+  position: relative; // Ensure the hero section is positioned
+
+  &__logo {
+    width: 76px;
+    height: 76px;
+  }
+}

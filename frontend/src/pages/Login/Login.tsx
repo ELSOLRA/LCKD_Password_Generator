@@ -1,18 +1,25 @@
 import React from "react";
-import Header from "../../components/Header/Header";
 import SignInButton from "../../components/Sign-In-Button/Sign-In-Button";
+import Hero from "../../components/Hero/Hero"; // Import the Hero component
 import "./login.scss";
+import CredentialForm from "../../components/CredentialForm/CredentialForm";
+import SubmitButton from "../../components/SubmitButton/SubmitButton"; // Import the SubmitButton
 
 const Login: React.FC = () => {
+  const handleSubmit = () => {
+    // Handle submit logic here
+    console.log("Button clicked!");
+  };
+
   return (
     <div className="login">
-      <Header />
+      <Hero /> {/* Use the Hero component */}
+      <SignInButton />
       <div className="login__content">
+        <h1>LCKD</h1>
         <h2>KEEPING YOUR PASSWORDS SAFE</h2>
-        <input type="text" placeholder="USERNAME" />
-        <input type="password" placeholder="PASSWORD" />
-        <SignInButton />
-        <button className="signup-button">Sign up</button>
+        <CredentialForm />
+        <SubmitButton text="LET ME IN" onClick={handleSubmit} />{" "}
       </div>
     </div>
   );

@@ -2,4 +2,7 @@
 
 .sign-in-button {
   @include mixins.sign-in-button;
+  position: absolute;
+  left: 84%;
+  transform: translateX(-50%);
 }
