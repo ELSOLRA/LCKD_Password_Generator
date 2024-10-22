@@ -1,5 +1,5 @@
 import React from "react";
-import "./CredentialForm.scss";
+import "./credentialForm.scss";
 
 interface CredentialFormProps {
   onSubmit: (data: { www: string; username: string; password: string }) => void;
