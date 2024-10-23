@@ -1,22 +1,66 @@
 import React from "react";
 import "./credentialForm.scss";
-import showPassword from "../../assets/actions/show-password-button.png";
+import HidePassword from "../../assets/actions/hide-password-button.png";
+import GenerateButton from "../../assets/actions/generate-button.png";
 
-const CredentialForm: React.FC = () => {
+interface CredentialFormProps {
+  wwwLabel?: string;
+  usernameLabel: string;
+  passwordLabel: string;
+  wwwPlaceholder?: string;
+  usernamePlaceholder?: string;
+  passwordPlaceholder?: string;
+  showGenerateButton?: boolean;
+}
+
+const CredentialForm: React.FC<CredentialFormProps> = ({
+  wwwLabel,
+  usernameLabel,
+  passwordLabel,
+  wwwPlaceholder = "",
+  usernamePlaceholder = "",
+  passwordPlaceholder = "",
+  showGenerateButton = false,
+}) => {
   return (
     <form className="credential-form">
+      {wwwLabel && (
+        <div className="input-group">
+          <label htmlFor="www">{wwwLabel}</label>
+          <input type="text" id="www" placeholder={wwwPlaceholder} />
+        </div>
+      )}
       <div className="input-group">
-        <label htmlFor="username">USERNAME</label>
-        <input type="text" id="username" placeholder="sixten.svensson" />
+        <label htmlFor="username">{usernameLabel}</label>
+        <input type="text" id="username" placeholder={usernamePlaceholder} />
       </div>
       <div className="input-group">
-        <label htmlFor="password">PASSWORD</label>
+        <label htmlFor="password">{passwordLabel}</label>
         <div className="password-wrapper">
-          <input type="password" id="password" placeholder="••••••••" />
-          <span className="toggle-password">
-            <img src={showPassword} alt="" />
-          </span>{" "}
-          {/* Placeholder for the icon */}
+          <input
+            type="password"
+            id="password"
+            placeholder={passwordPlaceholder}
+          />
+          {showGenerateButton ? (
+            <span
+              className="generate-password"
+              onClick={() => {
+                /* Add logic to generate password */
+              }}
+            >
+              <img src={GenerateButton} alt="Generate Password" />
+            </span>
+          ) : (
+            <span
+              className="toggle-password"
+              onClick={() => {
+                /* Add logic to toggle password visibility */
+              }}
+            >
+              <img src={HidePassword} alt="Hide Password" />
+            </span>
+          )}
         </div>
       </div>
     </form>

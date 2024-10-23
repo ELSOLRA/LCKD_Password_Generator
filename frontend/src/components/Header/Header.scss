@@ -1,11 +1,8 @@
 @use "../../styles/variables";
+@use "../../styles/mixins";
 
 .header {
-  display: flex;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: variables.$primary-color;
-  color: variables.$white-color;
+  @include mixins.header-style;
 
   &__logo {
     width: 40px;
@@ -14,8 +11,7 @@
   }
 
   &__title {
-    font-size: 24px;
-    font-weight: bold;
-    color: variables.$secondary-color;
+    @include mixins.font-title;
+    color: variables.$white-color;
   }
 }

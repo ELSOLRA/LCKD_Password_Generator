@@ -1,5 +1,5 @@
 import React from "react";
-import "./submitButton.scss"; // Import the styles
+import "./submitButton.scss";
 
 const SubmitButton: React.FC<{ text: string; onClick: () => void }> = ({
   text,
