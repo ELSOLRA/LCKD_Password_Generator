@@ -9,9 +9,10 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: eu-north-1
   environment:
-    USER_TABLE: ${self:service}-users-${self:provider.stage}
+    USERS_TABLE: ${self:service}-userSs-${self:provider.stage}
     PASSWORDS_TABLE: ${self:service}-passwords-${self:provider.stage}
-    ENCRYPTION_KEY: abc123
+    JWT_SECRET: abc123
+    ENCRYPTION_KEY:
   iam:
     role:
       statements:
@@ -24,8 +25,9 @@ provider:
             - dynamodb:UpdateItem
             - dynamodb:DeleteItem
           Resource:
-            - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USER_TABLE}
+            - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USERS_TABLE}
             - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PASSWORDS_TABLE}
+            - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USERS_TABLE}/index/*
 
 package:
   individually: true
@@ -48,13 +50,22 @@ resources:
     UserTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.environment.USER_TABLE}
+        TableName: ${self:provider.environment.USERS_TABLE}
         AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
           - AttributeName: username
             AttributeType: S
         KeySchema:
-          - AttributeName: username
+          - AttributeName: userId
             KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: UsernameIndex
+            KeySchema:
+              - AttributeName: username
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
         BillingMode: PAY_PER_REQUEST
 
     PasswordsTable:
