@@ -37,4 +37,4 @@ jobs:
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
           SERVERLESS_ORG: ${{ secrets.SERVERLESS_ORG }}
         run: |
-          serverless deploy --stage dev --verbose
+          npm run deploy:dev
