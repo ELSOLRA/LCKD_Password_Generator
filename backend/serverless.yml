@@ -38,13 +38,18 @@ build:
     minify: true
 
 functions:
-  register:
-    handler: handler.hello
+  signup:
+    handler: src/handlers/Users/Login/userSignup.handler
     events:
       - httpApi:
-          path: /
-          method: get
-
+          path: /users
+          method: post
+  loginUser:
+    handler: src/functions/Users/Login/userLogin.handler
+    events:
+      - httpApi:
+          path: /login
+          method: post
 resources:
   Resources:
     UserTable:
