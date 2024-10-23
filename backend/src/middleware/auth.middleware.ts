@@ -1,4 +1,4 @@
-import { AuthHandler, AuthMiddleware } from "../interfaces/auth.interfaces";
+import { AuthHandler, AuthMiddleware } from "../interfaces/auth.interface";
 import { sendError } from "../utils/apiResponse";
 import { verifyToken } from "../utils/jwt";
 
