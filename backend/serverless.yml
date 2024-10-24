@@ -1,0 +1,91 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: ${env:SERVERLESS_ORG}
+
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: password-manager
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  stage: ${opt:stage, 'dev'}
+  region: eu-north-1
+  environment:
+    USERS_TABLE: ${self:service}-users-${self:provider.stage}
+    PASSWORDS_TABLE: ${self:service}-passwords-${self:provider.stage}
+    JWT_SECRET: abc123
+    ENCRYPTION_KEY: 123a
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USERS_TABLE}
+            - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PASSWORDS_TABLE}
+            - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USERS_TABLE}/index/*
+
+package:
+  individually: true
+
+build:
+  esbuild:
+    bundle: true
+    minify: true
+
+functions:
+  signup:
+    handler: src/handlers/Users/Signup/userSignup.handler
+    events:
+      - httpApi:
+          path: /users
+          method: post
+  loginUser:
+    handler: src/handlers/Users/Login/userLogin.handler
+    events:
+      - httpApi:
+          path: /login
+          method: post
+resources:
+  Resources:
+    UserTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.USERS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: username
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: UsernameIndex
+            KeySchema:
+              - AttributeName: username
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+        BillingMode: PAY_PER_REQUEST
+
+    PasswordsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.PASSWORDS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: website
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: website
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST

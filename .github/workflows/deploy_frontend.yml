@@ -7,6 +7,10 @@ on:
     paths:
       - "frontend/**"
 
+permissions:
+  contents: read
+  id-token: write
+
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -15,16 +19,6 @@ env:
   SOURCE_DIR: "dist"
 
 jobs:
-  check-branch:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main' && github.head_ref != 'dev'
-    steps:
-      - name: Checks if pull request is from dev
-        run: |
-          echo "Merges to main are only from the dev branch"
-          echo "Your are on branch: ${{ github.head_ref }}"
-          exit 1
-
   build:
     runs-on: ubuntu-latest
     steps:
@@ -34,7 +28,7 @@ jobs:
       - name: Build dist
         run: npm run build
       - name: Deploy to S3 bucket
-        if: github.event_name = 'push' && github.ref == 'refs/heads/dev'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
         uses: jakejarvis/s3-sync-action@master
         with:
           args: --follow-symlinks --delete
