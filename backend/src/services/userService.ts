@@ -1,5 +1,4 @@
 import { v4 as uuid } from "uuid";
-import CryptoJs from "crypto-js";
 import * as dynamoDbUtils from "../utils/dynamoDbUtils";
 import {
   User,
@@ -8,18 +7,9 @@ import {
   UserResponse,
 } from "../interfaces/user.interface";
 import { generateToken } from "../utils/jwt";
+import { decryptData, encryptData } from "../utils/encryptionUtils";
 
 const usersTable = process.env.USERS_TABLE as string;
-const encryptionKey = process.env.ENCRYPTION_KEY as string;
-
-const encryptPsw = (password: string): string => {
-  return CryptoJs.AES.encrypt(password, encryptionKey).toString();
-};
-
-const decryptPsw = (encryptedPsw: string): string => {
-  const bytes = CryptoJs.AES.decrypt(encryptedPsw, encryptionKey);
-  return bytes.toString(CryptoJs.enc.Utf8);
-};
 
 export const getUserByUsername = async (
   username: string
@@ -54,7 +44,7 @@ export const signupUser = async ({
     if (existingUsername) {
       throw new Error("Username already exists");
     }
-    const encryptedPsw = encryptPsw(password);
+    const encryptedPsw = encryptData(password);
 
     const user: User = {
       userId,
@@ -82,7 +72,7 @@ export const loginUser = async ({
       throw new Error("User not found");
     }
 
-    const decryptedPsw = decryptPsw(user.password);
+    const decryptedPsw = decryptData(user.password);
 
     if (password !== decryptedPsw) {
       throw new Error("Invalid password");
