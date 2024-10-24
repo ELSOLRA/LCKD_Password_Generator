@@ -5,6 +5,7 @@ import {
   UpdatePasswordInput,
 } from "../interfaces/password.interface";
 import { decryptData, encryptData } from "../utils/encryptionUtils";
+import { UpdateCommandInput } from "@aws-sdk/lib-dynamodb";
 
 const passwordsTable = process.env.PASSWORDS_TABLE as string;
 
@@ -81,7 +82,7 @@ export const getAllWebsitesAndPasswords = async (
 export const updatePassword = async (
   userId: string,
   website: string,
-  updates: UpdatePasswordInput
+  { password }: UpdatePasswordInput
 ): Promise<Password> => {
   try {
     const existingPassword = await getPasswordByWebsite(userId, website);
@@ -89,31 +90,19 @@ export const updatePassword = async (
       throw new Error("Password not found");
     }
 
-    const updateExpressions: string[] = [];
-    const expressionAttributeNames: Record<string, string> = {};
-    const expressionAttributeValues: Record<string, any> = {};
-
-    if (updates.username) {
-      updateExpressions.push("#username = :username");
-      expressionAttributeNames["#username"] = "username";
-      expressionAttributeValues[":username"] = updates.username;
-    }
-
-    if (updates.password) {
-      updateExpressions.push("#password = :password");
-      expressionAttributeNames["#password"] = "password";
-      expressionAttributeValues[":password"] = encryptData(updates.password);
-    }
-
-    const params = {
+    const params: UpdateCommandInput = {
       TableName: passwordsTable,
       Key: {
         userId,
         website,
       },
-      UpdateExpression: `SET ${updateExpressions.join(", ")}`,
-      ExpressionAttributeNames: expressionAttributeNames,
-      ExpressionAttributeValues: expressionAttributeValues,
+      UpdateExpression: "SET #password = :password",
+      ExpressionAttributeNames: {
+        "#password": "password",
+      },
+      ExpressionAttributeValues: {
+        ":password": encryptData(password),
+      },
       ReturnValues: "ALL_NEW",
     };
 
@@ -121,9 +110,10 @@ export const updatePassword = async (
     if (!updated) {
       throw new Error("Failed to update password");
     }
+
     updated.password = decryptData(updated.password);
     return updated;
-  } catch (error) {
+  } catch {
     throw new Error("Failed to update password");
   }
 };

@@ -12,7 +12,10 @@ export interface CreatePasswordInput {
 }
 
 export interface UpdatePasswordInput {
+  password: string; // only password for the update
+}
+
+export interface UpdatePasswordRequest {
   website: string;
-  username?: string;
-  password?: string;
+  password: string;
 }

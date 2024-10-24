@@ -51,6 +51,20 @@ functions:
       - httpApi:
           path: /login
           method: post
+
+  createSitePassword:
+    handler: src/handlers/Passwords/CreatePassword/create.handler
+    events:
+      - httpApi:
+          path: /passwords
+          method: post
+  updateSitePassword:
+    handler: src/handlers/Passwords/UpdatePassword/update.handler
+    events:
+      - httpApi:
+          path: /passwords
+          method: put
+
 resources:
   Resources:
     UserTable:
