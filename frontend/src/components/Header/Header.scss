@@ -1,0 +1,17 @@
+@use "../../styles/variables";
+@use "../../styles/mixins";
+
+.header {
+  @include mixins.header-style;
+
+  &__logo {
+    width: 40px;
+    height: auto;
+    margin-right: 10px;
+  }
+
+  &__title {
+    @include mixins.font-title;
+    color: variables.$white-color;
+  }
+}

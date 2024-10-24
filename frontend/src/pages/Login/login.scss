@@ -1,0 +1,60 @@
+@use "../../styles/variables";
+@use "../../styles/mixins";
+
+.login {
+  @include mixins.full-height-center; // Use the mixin
+
+  &__content {
+    width: 100%;
+    max-width: 400px; // Limit width for better appearance
+    padding: 20px;
+
+    h1 {
+      @include mixins.font-large; // Use large font mixin
+      margin-bottom: 20px; // Space below the title
+    }
+
+    h2 {
+      @include mixins.font-medium; // Use the new font-medium mixin
+      color: variables.$secondary-color; // Set color to secondary color
+      margin-bottom: 20px; // Space below the subtitle
+    }
+
+    input {
+      display: block;
+      margin: 10px auto;
+      padding: 10px;
+      width: 100%;
+      border: 1px solid variables.$secondary-color; // Yellow border
+      border-radius: 5px;
+      background-color: transparent; // Transparent background
+      color: variables.$white-color; // White text
+    }
+
+    .signup-button {
+      @include mixins.font-normal; // Use normal font mixin
+      background-color: transparent;
+      color: variables.$secondary-color; // Yellow
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .credential-form .input-group label {
+      display: block;
+      color: #15085f; // Specific color for Login page
+      background-color: #ffbd21; // Specific background for Login page
+      margin-bottom: 5px;
+      position: absolute;
+      border-radius: 0px 4px 0px 0px;
+      padding: 3px;
+      transform: translateY(-14px);
+      font-family: "Open Sans", sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 18px;
+      letter-spacing: 0.15em;
+      text-align: left;
+    }
+  }
+}
