@@ -1,5 +1,5 @@
 # "org" ensures this Service is used with the correct Serverless Framework Access Key.
-# org: ${env:SERVERLESS_ORG}
+org: ${env:SERVERLESS_ORG}
 
 # "service" is the name of this project. This will also be added to your AWS resource names.
 service: password-manager
@@ -10,10 +10,10 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: eu-north-1
   environment:
-    USERS_TABLE: ${self:service}-userSs-${self:provider.stage}
+    USERS_TABLE: ${self:service}-users-${self:provider.stage}
     PASSWORDS_TABLE: ${self:service}-passwords-${self:provider.stage}
     JWT_SECRET: abc123
-    ENCRYPTION_KEY:
+    ENCRYPTION_KEY: 123a
   iam:
     role:
       statements:
@@ -40,7 +40,7 @@ build:
 
 functions:
   signup:
-    handler: src/handlers/Users/Login/userSignup.handler
+    handler: src/handlers/Users/Signup/userSignup.handler
     events:
       - httpApi:
           path: /users

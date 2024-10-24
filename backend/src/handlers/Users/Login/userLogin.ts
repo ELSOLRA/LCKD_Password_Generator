@@ -3,10 +3,13 @@ import { LoginInput } from "../../../interfaces/user.interface";
 import { loginUser } from "../../../services/userService";
 import { sendError, sendSuccessResponse } from "../../../utils/apiResponse";
 import middy from "@middy/core";
+import jsonBodyParser from "@middy/http-json-body-parser";
 
-const loginHandler = async (event: APIGatewayProxyEventV2) => {
+const loginHandler = async (
+  event: Omit<APIGatewayProxyEventV2, "body"> & { body: LoginInput }
+) => {
   try {
-    const { username, password }: LoginInput = JSON.parse(event.body || "{}");
+    const { username, password } = event.body;
     const data = await loginUser({ username, password });
     return sendSuccessResponse(200, {
       token: data.token,
@@ -23,4 +26,8 @@ const loginHandler = async (event: APIGatewayProxyEventV2) => {
   }
 };
 
-export const handler = middy(loginHandler);
+const middleware = middy(loginHandler, {
+  timeoutEarlyInMillis: 0, // disables middy timeout errors
+});
+
+export const handler = middleware.use(jsonBodyParser());

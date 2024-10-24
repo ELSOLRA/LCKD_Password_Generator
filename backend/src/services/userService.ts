@@ -35,6 +35,7 @@ export const getUserByUsername = async (
     };
 
     const user = await dynamoDbUtils.query<User>(params);
+
     return user[0] || null;
   } catch (error) {
     throw new Error("Error fetching user by username");
@@ -47,7 +48,9 @@ export const signupUser = async ({
 }: CreateUserInput): Promise<Omit<User, "password">> => {
   try {
     const userId = uuid();
+
     const existingUsername = await getUserByUsername(username);
+
     if (existingUsername) {
       throw new Error("Username already exists");
     }
@@ -60,9 +63,11 @@ export const signupUser = async ({
     };
 
     await dynamoDbUtils.putItem<User>(usersTable, user);
+
     const { password: _, ...userWithoutPassword } = user;
     return userWithoutPassword;
   } catch (error) {
+    console.error("Error in signupUser service:", error);
     throw new Error("Database error: failed to create user");
   }
 };
