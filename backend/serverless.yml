@@ -1,5 +1,6 @@
 # "org" ensures this Service is used with the correct Serverless Framework Access Key.
-org: ${env:SERVERLESS_ORG}
+# org: ${env:SERVERLESS_ORG}
+
 # "service" is the name of this project. This will also be added to your AWS resource names.
 service: password-manager
 
@@ -45,7 +46,7 @@ functions:
           path: /users
           method: post
   loginUser:
-    handler: src/functions/Users/Login/userLogin.handler
+    handler: src/handlers/Users/Login/userLogin.handler
     events:
       - httpApi:
           path: /login
