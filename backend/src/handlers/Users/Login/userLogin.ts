@@ -10,6 +10,11 @@ const loginHandler = async (
 ) => {
   try {
     const { username, password } = event.body;
+
+    if (!event.body) {
+      return sendError(400, "Missing request body");
+    }
+
     const data = await loginUser({ username, password });
     return sendSuccessResponse(200, {
       token: data.token,
