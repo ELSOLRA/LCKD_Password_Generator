@@ -89,6 +89,9 @@ export const updatePassword = async (
     if (!existingPassword) {
       throw new Error("Password not found");
     }
+    if (existingPassword.userId !== userId) {
+      throw new Error("Not authorized to delete this password");
+    }
 
     const params: UpdateCommandInput = {
       TableName: passwordsTable,
@@ -123,8 +126,17 @@ export const deletePassword = async (
   website: string
 ): Promise<void> => {
   try {
+    const existingPassword = await getPasswordByWebsite(userId, website);
+
+    if (!existingPassword) {
+      throw new Error("Password not found");
+    }
+    if (existingPassword.userId !== userId) {
+      throw new Error("Not authorized to delete this password");
+    }
+
     await dynamoDbUtils.deleteItem(passwordsTable, { userId, website });
   } catch (error) {
-    throw new Error(`Failed to delete password: ${error.message}`);
+    throw new Error("Failed to delete password");
   }
 };

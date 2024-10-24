@@ -52,6 +52,12 @@ functions:
           path: /login
           method: post
 
+  getAllPasswords:
+    handler: src/handlers/Passwords/GetPasswords/getAll.handler
+    events:
+      - httpApi:
+          path: /passwords
+          method: get
   createSitePassword:
     handler: src/handlers/Passwords/CreatePassword/create.handler
     events:
@@ -64,6 +70,12 @@ functions:
       - httpApi:
           path: /passwords
           method: put
+  deleteSitePassword:
+    handler: src/handlers/Passwords/DeletePassword/delete.handler
+    events:
+      - httpApi:
+          path: /passwords
+          method: delete
 
 resources:
   Resources:

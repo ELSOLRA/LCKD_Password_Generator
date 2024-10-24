@@ -19,3 +19,7 @@ export interface UpdatePasswordRequest {
   website: string;
   password: string;
 }
+
+export interface DeletePasswordRequest {
+  website: string;
+}
